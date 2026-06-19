@@ -82,17 +82,87 @@ public partial class LibraryViewModel : ObservableObject
         {
             if (IsAnimeMode)
             {
-                var anime = await _malService.GetAnimeListAsync("watching");
-                _allAnime = anime;
+                var localAnime = LocalLibraryManager.LocalAnime;
+                List<AnimeEntry> malAnime = new();
+                bool syncFailed = false;
+                try
+                {
+                    malAnime = await _malService.GetAnimeListAsync("watching");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"MAL API call failed: {ex.Message}");
+                    syncFailed = true;
+                }
+
+                var mergedAnime = new List<AnimeEntry>();
+                foreach (var malItem in malAnime)
+                {
+                    malItem.IsFromMal = true;
+                    malItem.IsFromLocal = LocalLibraryManager.IsAnimeSaved(malItem.Id);
+                    mergedAnime.Add(malItem);
+                }
+
+                foreach (var localItem in localAnime)
+                {
+                    if (mergedAnime.All(a => a.Id != localItem.Id))
+                    {
+                        localItem.IsFromMal = false;
+                        localItem.IsFromLocal = true;
+                        mergedAnime.Add(localItem);
+                    }
+                }
+
+                _allAnime = mergedAnime;
                 FilterList();
-                _ = Task.Run(() => LoadAnimeCoversAsync(anime));
+                _ = Task.Run(() => LoadAnimeCoversAsync(_allAnime));
+
+                if (syncFailed && _allAnime.Count == 0)
+                {
+                    ErrorMessage = "MyAnimeList sync failed and no local library items found. Check connection.";
+                }
             }
             else
             {
-                var manga = await _malService.GetMangaListAsync("reading");
-                _allManga = manga;
+                var localManga = LocalLibraryManager.LocalManga;
+                List<MangaEntry> malManga = new();
+                bool syncFailed = false;
+                try
+                {
+                    malManga = await _malService.GetMangaListAsync("reading");
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"MAL API call failed: {ex.Message}");
+                    syncFailed = true;
+                }
+
+                var mergedManga = new List<MangaEntry>();
+                foreach (var malItem in malManga)
+                {
+                    malItem.IsFromMal = true;
+                    malItem.IsFromLocal = LocalLibraryManager.IsMangaSaved(malItem.Id);
+                    mergedManga.Add(malItem);
+                }
+
+                foreach (var localItem in localManga)
+                {
+                    if (mergedManga.All(m => m.Id != localItem.Id))
+                    {
+                        localItem.IsFromMal = false;
+                        localItem.IsFromLocal = true;
+                        mergedManga.Add(localItem);
+                    }
+                }
+
+                _allManga = mergedManga;
                 FilterList();
-                _ = Task.Run(() => LoadMangaCoversAsync(manga));
+                _ = Task.Run(() => LoadMangaCoversAsync(_allManga));
+
+                if (syncFailed && _allManga.Count == 0)
+                {
+                    ErrorMessage = "MyAnimeList sync failed and no local library items found. Check connection.";
+                }
             }
         }
         catch (Exception ex)
@@ -129,12 +199,22 @@ public partial class LibraryViewModel : ObservableObject
             if (IsAnimeMode)
             {
                 var results = await _malService.SearchAnimeAsync(SearchQuery);
+                foreach (var item in results)
+                {
+                    item.IsFromLocal = LocalLibraryManager.IsAnimeSaved(item.Id);
+                    item.IsFromMal = (item.MyListStatus != null) || _allAnime.Any(a => a.Id == item.Id && a.IsFromMal);
+                }
                 AnimeList = new ObservableCollection<AnimeEntry>(results);
                 _ = Task.Run(() => LoadAnimeCoversAsync(results));
             }
             else
             {
                 var results = await _malService.SearchMangaAsync(SearchQuery);
+                foreach (var item in results)
+                {
+                    item.IsFromLocal = LocalLibraryManager.IsMangaSaved(item.Id);
+                    item.IsFromMal = (item.MyListStatus != null) || _allManga.Any(m => m.Id == item.Id && m.IsFromMal);
+                }
                 MangaList = new ObservableCollection<MangaEntry>(results);
                 _ = Task.Run(() => LoadMangaCoversAsync(results));
             }

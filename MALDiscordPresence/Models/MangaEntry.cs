@@ -28,6 +28,22 @@ public class MangaEntry : ObservableObject
         get => _localCoverPath;
         set => SetProperty(ref _localCoverPath, value);
     }
+
+    private bool _isFromMal;
+    [JsonIgnore]
+    public bool IsFromMal
+    {
+        get => _isFromMal;
+        set => SetProperty(ref _isFromMal, value);
+    }
+
+    private bool _isFromLocal;
+    [JsonIgnore]
+    public bool IsFromLocal
+    {
+        get => _isFromLocal;
+        set => SetProperty(ref _isFromLocal, value);
+    }
 }
 
 public class MangaListStatus

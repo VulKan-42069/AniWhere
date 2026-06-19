@@ -12,7 +12,7 @@ public partial class DetailViewModel : ObservableObject
 {
     private readonly IDiscordService _discordService;
     private readonly MainViewModel _mainViewModel;
-    private readonly object _mediaEntry;
+    private readonly object? _mediaEntry;
     private readonly DispatcherTimer _elapsedTimer;
     private DateTime _startedAt;
 
@@ -43,7 +43,20 @@ public partial class DetailViewModel : ObservableObject
     [ObservableProperty]
     private string _previewState = string.Empty;
 
-    public DetailViewModel(object mediaEntry, IDiscordService discordService, MainViewModel mainViewModel)
+    [ObservableProperty]
+    private bool _isSavedToLocal;
+
+    [ObservableProperty]
+    private string _localSaveButtonText = "✚ SAVE TO LIBRARY";
+
+    public bool IsPlaceholder => _mediaEntry == null;
+
+    public bool MediaEntryEquals(object entry)
+    {
+        return _mediaEntry != null && _mediaEntry == entry;
+    }
+
+    public DetailViewModel(object? mediaEntry, IDiscordService discordService, MainViewModel mainViewModel)
     {
         _mediaEntry = mediaEntry;
         _discordService = discordService;
@@ -54,6 +67,20 @@ public partial class DetailViewModel : ObservableObject
             Interval = TimeSpan.FromSeconds(1)
         };
         _elapsedTimer.Tick += OnElapsedTimerTick;
+
+        if (mediaEntry == null)
+        {
+            Type = MediaType.Anime;
+            Title = "No Active Status";
+            CoverImagePath = string.Empty;
+            CoverImageUrl = string.Empty;
+            TotalEpisodes = 0;
+            SelectedEpisode = 0;
+            MalUrl = string.Empty;
+            IsSavedToLocal = false;
+            LocalSaveButtonText = "✚ SAVE TO LIBRARY";
+            return;
+        }
 
         string localPath = string.Empty;
         string rawUrl = string.Empty;
@@ -67,6 +94,7 @@ public partial class DetailViewModel : ObservableObject
             TotalEpisodes = anime.NumEpisodes;
             SelectedEpisode = anime.MyListStatus?.NumEpisodesWatched ?? 0;
             MalUrl = $"https://myanimelist.net/anime/{anime.Id}";
+            IsSavedToLocal = LocalLibraryManager.IsAnimeSaved(anime.Id);
         }
         else if (mediaEntry is MangaEntry manga)
         {
@@ -77,11 +105,14 @@ public partial class DetailViewModel : ObservableObject
             TotalEpisodes = manga.NumChapters;
             SelectedEpisode = manga.MyListStatus?.NumChaptersRead ?? 0;
             MalUrl = $"https://myanimelist.net/manga/{manga.Id}";
+            IsSavedToLocal = LocalLibraryManager.IsMangaSaved(manga.Id);
         }
         else
         {
             throw new ArgumentException("Invalid media entry type.");
         }
+
+        LocalSaveButtonText = IsSavedToLocal ? "➖ REMOVE FROM LIBRARY" : "✚ SAVE TO LIBRARY";
 
         CoverImageUrl = rawUrl;
         CoverImagePath = localPath;
@@ -105,6 +136,26 @@ public partial class DetailViewModel : ObservableObject
         }
 
         UpdatePreview();
+    }
+
+    partial void OnSelectedEpisodeChanged(int value)
+    {
+        if (value < 0)
+        {
+            SelectedEpisode = 0;
+            return;
+        }
+        if (TotalEpisodes > 0 && value > TotalEpisodes)
+        {
+            SelectedEpisode = TotalEpisodes;
+            return;
+        }
+
+        UpdatePreview();
+        if (IsPresenceActive)
+        {
+            UpdatePresence();
+        }
     }
 
     private void OnElapsedTimerTick(object? sender, EventArgs e)
@@ -159,6 +210,8 @@ public partial class DetailViewModel : ObservableObject
         _startedAt = DateTime.UtcNow;
         _elapsedTimer.Start();
         
+        _mainViewModel.ActiveStatusViewModel = this;
+        
         UpdatePresence();
     }
 
@@ -168,6 +221,11 @@ public partial class DetailViewModel : ObservableObject
         StatusButtonText = "▶ START STATUS";
         _elapsedTimer.Stop();
         ElapsedTimeText = "00:00:00";
+        
+        if (_mainViewModel.ActiveStatusViewModel == this)
+        {
+            _mainViewModel.ActiveStatusViewModel = null;
+        }
         
         _discordService.ClearPresence();
     }
@@ -211,7 +269,6 @@ public partial class DetailViewModel : ObservableObject
     [RelayCommand]
     private void BackToLibrary()
     {
-        StopPresence(); // clear RPC when leaving
         _mainViewModel.NavigateToLibrary();
     }
 
@@ -230,5 +287,41 @@ public partial class DetailViewModel : ObservableObject
         {
             System.Diagnostics.Debug.WriteLine($"Failed to open MAL URL: {ex.Message}");
         }
+    }
+
+    [RelayCommand]
+    private void ToggleLocalSave()
+    {
+        if (IsPlaceholder) return;
+
+        if (IsSavedToLocal)
+        {
+            if (_mediaEntry is AnimeEntry anime)
+            {
+                LocalLibraryManager.RemoveAnime(anime.Id);
+            }
+            else if (_mediaEntry is MangaEntry manga)
+            {
+                LocalLibraryManager.RemoveManga(manga.Id);
+            }
+            IsSavedToLocal = false;
+        }
+        else
+        {
+            if (_mediaEntry is AnimeEntry anime)
+            {
+                LocalLibraryManager.SaveAnime(anime);
+            }
+            else if (_mediaEntry is MangaEntry manga)
+            {
+                LocalLibraryManager.SaveManga(manga);
+            }
+            IsSavedToLocal = true;
+        }
+    }
+
+    partial void OnIsSavedToLocalChanged(bool value)
+    {
+        LocalSaveButtonText = value ? "➖ REMOVE FROM LIBRARY" : "✚ SAVE TO LIBRARY";
     }
 }

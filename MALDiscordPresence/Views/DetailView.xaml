@@ -46,10 +46,11 @@
                 HorizontalAlignment="Left"
                 Padding="15,8"
                 FontSize="11"
-                Margin="0,0,0,15"/>
+                Margin="0,0,0,15"
+                Visibility="{Binding IsPlaceholder, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=invert}"/>
 
         <!-- Details Grid -->
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Visibility="{Binding IsPlaceholder, Converter={StaticResource BoolToVisibilityConverter}, ConverterParameter=invert}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="220"/> <!-- Left: Cover -->
                 <ColumnDefinition Width="*"/>   <!-- Right: Info & Controls -->
@@ -133,13 +134,17 @@
                                     Background="{StaticResource CardSurfaceBrush}"
                                     Width="80" Height="36"
                                     SnapsToDevicePixels="True">
-                                <TextBlock Text="{Binding SelectedEpisode}" 
-                                           Foreground="{StaticResource PrimaryRubyBrush}"
-                                           FontFamily="Consolas" 
-                                           FontSize="16" 
-                                           FontWeight="Bold" 
-                                           HorizontalAlignment="Center" 
-                                           VerticalAlignment="Center"/>
+                                <TextBox Text="{Binding SelectedEpisode, UpdateSourceTrigger=PropertyChanged, TargetNullValue=0}" 
+                                         Foreground="{StaticResource PrimaryRubyBrush}"
+                                         FontFamily="Consolas" 
+                                         FontSize="16" 
+                                         FontWeight="Bold" 
+                                         HorizontalAlignment="Center" 
+                                         VerticalAlignment="Center"
+                                         TextAlignment="Center"
+                                         BorderThickness="0"
+                                         Background="Transparent"
+                                         Width="70"/>
                             </Border>
 
                             <!-- Increment -->
@@ -241,6 +246,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
                                 <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
                             <Button Grid.Column="0" 
@@ -259,8 +265,15 @@
                                     </Style>
                                 </Button.Style>
                             </Button>
-                            
+
                             <Button Grid.Column="1" 
+                                    Content="{Binding LocalSaveButtonText}" 
+                                    Command="{Binding ToggleLocalSaveCommand}"
+                                    Style="{StaticResource GhostButton}"
+                                    Height="45"
+                                    Margin="10,0,0,0"/>
+                            
+                            <Button Grid.Column="2" 
                                     Content="↗ VIEW ON MAL" 
                                     Command="{Binding ViewOnMalCommand}"
                                     Style="{StaticResource GhostButton}"
@@ -271,5 +284,35 @@
                 </Border>
             </Grid>
         </Grid>
+
+        <!-- Placeholder View (Only visible when no active status) -->
+        <Border Grid.Row="1" 
+                Style="{StaticResource MangaPanel}" 
+                HorizontalAlignment="Center" 
+                VerticalAlignment="Center" 
+                Width="480" Height="220"
+                Visibility="{Binding IsPlaceholder, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" Margin="20">
+                <TextBlock Text="(・_・;) NO ACTIVE BROADCAST" 
+                           Foreground="{StaticResource PrimaryRubyBrush}" 
+                           FontFamily="Segoe UI" 
+                           FontSize="20" 
+                           FontWeight="Bold" 
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,10"/>
+                <TextBlock Text="There is no active status being broadcasted to Discord right now." 
+                           Foreground="{StaticResource TextPrimaryBrush}" 
+                           FontFamily="Segoe UI" 
+                           FontSize="13" 
+                           TextAlignment="Center"
+                           Margin="0,0,0,15"/>
+                <TextBlock Text="Go to the Library Grid tab, select an anime or manga entry, and click 'START STATUS' to launch a broadcast." 
+                           Foreground="{StaticResource TextSecondaryBrush}" 
+                           FontFamily="Segoe UI" 
+                           FontSize="12" 
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

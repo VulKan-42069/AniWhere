@@ -203,6 +203,42 @@
                                         <Image Source="{Binding LocalCoverPath}" 
                                                Stretch="UniformToFill" 
                                                RenderOptions.BitmapScalingMode="Fant"/>
+
+                                        <!-- Source Badges (MAL/LOCAL) -->
+                                        <StackPanel Orientation="Horizontal" 
+                                                    HorizontalAlignment="Left" 
+                                                    VerticalAlignment="Top" 
+                                                    Margin="5">
+                                            <!-- MAL Badge -->
+                                            <Border Background="{StaticResource PrimaryRubyBrush}" 
+                                                    BorderBrush="Black" 
+                                                    BorderThickness="1" 
+                                                    Padding="4,2" 
+                                                    Margin="0,0,3,0"
+                                                    SnapsToDevicePixels="True"
+                                                    Visibility="{Binding IsFromMal, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                <TextBlock Text="MAL" 
+                                                           Foreground="White" 
+                                                           FontFamily="Segoe UI" 
+                                                           FontSize="9" 
+                                                           FontWeight="Bold" 
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                            <!-- LOCAL Badge -->
+                                            <Border Background="#0F172A" 
+                                                    BorderBrush="Black" 
+                                                    BorderThickness="1" 
+                                                    Padding="4,2" 
+                                                    SnapsToDevicePixels="True"
+                                                    Visibility="{Binding IsFromLocal, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                <TextBlock Text="LOCAL" 
+                                                           Foreground="White" 
+                                                           FontFamily="Segoe UI" 
+                                                           FontSize="9" 
+                                                           FontWeight="Bold" 
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                        </StackPanel>
                                     </Grid>
                                 </Border>
 
@@ -304,6 +340,42 @@
                                         <Image Source="{Binding LocalCoverPath}" 
                                                Stretch="UniformToFill" 
                                                RenderOptions.BitmapScalingMode="Fant"/>
+
+                                        <!-- Source Badges (MAL/LOCAL) -->
+                                        <StackPanel Orientation="Horizontal" 
+                                                    HorizontalAlignment="Left" 
+                                                    VerticalAlignment="Top" 
+                                                    Margin="5">
+                                            <!-- MAL Badge -->
+                                            <Border Background="{StaticResource PrimaryRubyBrush}" 
+                                                    BorderBrush="Black" 
+                                                    BorderThickness="1" 
+                                                    Padding="4,2" 
+                                                    Margin="0,0,3,0"
+                                                    SnapsToDevicePixels="True"
+                                                    Visibility="{Binding IsFromMal, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                <TextBlock Text="MAL" 
+                                                           Foreground="White" 
+                                                           FontFamily="Segoe UI" 
+                                                           FontSize="9" 
+                                                           FontWeight="Bold" 
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                            <!-- LOCAL Badge -->
+                                            <Border Background="#0F172A" 
+                                                    BorderBrush="Black" 
+                                                    BorderThickness="1" 
+                                                    Padding="4,2" 
+                                                    SnapsToDevicePixels="True"
+                                                    Visibility="{Binding IsFromLocal, Converter={StaticResource BoolToVisibilityConverter}}">
+                                                <TextBlock Text="LOCAL" 
+                                                           Foreground="White" 
+                                                           FontFamily="Segoe UI" 
+                                                           FontSize="9" 
+                                                           FontWeight="Bold" 
+                                                           VerticalAlignment="Center"/>
+                                            </Border>
+                                        </StackPanel>
                                     </Grid>
                                 </Border>
 

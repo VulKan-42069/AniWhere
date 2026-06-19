@@ -12,7 +12,8 @@
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource SurfaceBrush}"
         BorderBrush="{StaticResource DarkRubyBrush}"
-        BorderThickness="1.5">
+        BorderThickness="1.5"
+        Icon="/Assets/icon.png">
 
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="40" 
@@ -206,6 +207,11 @@
                                      but since we swap VM, we can use simple binding triggers. -->
                             </Button.Resources>
                         </Button>
+                        
+                        <!-- Current Status Button -->
+                        <Button Content="Currently Watching" 
+                                Command="{Binding NavigateToActiveStatusCommand}"
+                                Style="{StaticResource SidebarNavButton}"/>
                         
                         <!-- Settings Button -->
                         <Button Content="App Settings" 

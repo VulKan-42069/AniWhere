@@ -9,12 +9,22 @@
     <UseWindowsForms>true</UseWindowsForms>
     <AssemblyName>MALStatus</AssemblyName>
     <RootNamespace>MALDiscordPresence</RootNamespace>
+    <ApplicationIcon>Assets\icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="DiscordRichPresence" Version="1.6.1.70" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Assets\icon.ico" />
+    <Content Remove="Assets\icon.ico" />
+    <Resource Include="Assets\icon.ico" />
+    <None Remove="Assets\icon.png" />
+    <Content Remove="Assets\icon.png" />
+    <Resource Include="Assets\icon.png" />
   </ItemGroup>
 
 </Project>

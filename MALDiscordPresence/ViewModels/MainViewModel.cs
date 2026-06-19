@@ -15,6 +15,9 @@ public partial class MainViewModel : ObservableObject
     private ObservableObject? _currentView;
 
     [ObservableProperty]
+    private DetailViewModel? _activeStatusViewModel;
+
+    [ObservableProperty]
     private bool _isAuthenticated;
 
     [ObservableProperty]
@@ -81,9 +84,30 @@ public partial class MainViewModel : ObservableObject
         CurrentView = new SettingsViewModel(_authService, _discordService);
     }
 
+    [RelayCommand]
+    public void NavigateToActiveStatus()
+    {
+        if (!IsAuthenticated) return;
+        if (ActiveStatusViewModel != null)
+        {
+            CurrentView = ActiveStatusViewModel;
+        }
+        else
+        {
+            CurrentView = new DetailViewModel(null, _discordService, this);
+        }
+    }
+
     public void NavigateToDetail(object mediaEntry)
     {
         if (!IsAuthenticated) return;
+
+        if (ActiveStatusViewModel != null && ActiveStatusViewModel.MediaEntryEquals(mediaEntry))
+        {
+            CurrentView = ActiveStatusViewModel;
+            return;
+        }
+
         CurrentView = new DetailViewModel(mediaEntry, _discordService, this);
     }
 

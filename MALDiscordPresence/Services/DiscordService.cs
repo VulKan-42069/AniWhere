@@ -95,7 +95,7 @@ public class DiscordService : IDiscordService
         {
             var presence = new RichPresence
             {
-                Type = state.Type == MediaType.Anime ? ActivityType.Watching : ActivityType.Playing,
+                Type = ActivityType.Watching,
                 Details = state.DetailText,
                 Assets = new Assets
                 {
