@@ -1,0 +1,22 @@
+<Application x:Class="MALDiscordPresence.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:MALDiscordPresence"
+             xmlns:converters="clr-namespace:MALDiscordPresence.Converters"
+             StartupUri="Views/MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Themes/MangaTheme.xaml" />
+                <ResourceDictionary Source="Themes/MangaButtons.xaml" />
+                <ResourceDictionary Source="Themes/MangaInputs.xaml" />
+                <ResourceDictionary Source="Themes/MangaControls.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Global Converters -->
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:ImageUrlToBitmapConverter x:Key="ImageUrlToBitmapConverter"/>
+            <converters:StatusToColorConverter x:Key="StatusToColorConverter"/>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,275 @@
+<UserControl x:Class="MALDiscordPresence.Views.DetailView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:MALDiscordPresence.Converters"
+             xmlns:controls="clr-namespace:MALDiscordPresence.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="550" d:DesignWidth="750"
+             Background="{StaticResource SurfaceBrush}">
+
+    <UserControl.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </UserControl.Resources>
+
+    <UserControl.RenderTransform>
+        <TranslateTransform X="0" Y="0"/>
+    </UserControl.RenderTransform>
+
+    <UserControl.Triggers>
+        <EventTrigger RoutedEvent="UserControl.Loaded">
+            <BeginStoryboard>
+                <Storyboard>
+                    <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.4"/>
+                    <DoubleAnimation Storyboard.TargetProperty="RenderTransform.(TranslateTransform.Y)" From="35" To="0" Duration="0:0:0.4">
+                        <DoubleAnimation.EasingFunction>
+                            <CubicEase EasingMode="EaseOut"/>
+                        </DoubleAnimation.EasingFunction>
+                    </DoubleAnimation>
+                </Storyboard>
+            </BeginStoryboard>
+        </EventTrigger>
+    </UserControl.Triggers>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/> <!-- Back Button -->
+            <RowDefinition Height="*"/>    <!-- Details and Controls -->
+        </Grid.RowDefinitions>
+
+        <!-- Back Button -->
+        <Button Grid.Row="0" 
+                Content="◄ BACK TO LIBRARY" 
+                Command="{Binding BackToLibraryCommand}"
+                Style="{StaticResource GhostButton}"
+                HorizontalAlignment="Left"
+                Padding="15,8"
+                FontSize="11"
+                Margin="0,0,0,15"/>
+
+        <!-- Details Grid -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/> <!-- Left: Cover -->
+                <ColumnDefinition Width="*"/>   <!-- Right: Info & Controls -->
+            </Grid.ColumnDefinitions>
+
+            <!-- Left: Cover Image Card -->
+            <Border Grid.Column="0" 
+                    Style="{StaticResource MangaPanel}"
+                    Height="300"
+                    VerticalAlignment="Top"
+                    Margin="0,0,15,0"
+                    Padding="0"
+                    ClipToBounds="True">
+                <Grid>
+                    <!-- Background loading placeholder -->
+                    <Border Background="#F1F5F9">
+                        <TextBlock Text="Loading..." 
+                                   Foreground="#94A3B8" 
+                                   FontFamily="Segoe UI" 
+                                   FontSize="12" 
+                                   HorizontalAlignment="Center" 
+                                   VerticalAlignment="Center"/>
+                    </Border>
+                    <!-- Local Image path binding -->
+                    <Image Source="{Binding CoverImagePath}"
+                           Stretch="UniformToFill"
+                           RenderOptions.BitmapScalingMode="Fant"/>
+                </Grid>
+            </Border>
+
+            <!-- Right: Info & RPC Controls -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/> <!-- Title metadata -->
+                    <RowDefinition Height="*"/>    <!-- RPC Control panel card -->
+                </Grid.RowDefinitions>
+
+                <!-- Title metadata -->
+                <StackPanel Grid.Row="0" Margin="0,0,0,15">
+                    <TextBlock Text="{Binding Title}" 
+                               Foreground="{StaticResource TextPrimaryBrush}" 
+                               FontFamily="Segoe UI" 
+                               FontSize="22" 
+                               FontWeight="Bold"
+                               TextWrapping="Wrap"/>
+                    
+                    <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                        <TextBlock Text="TYPE: " Foreground="{StaticResource TextSecondaryBrush}" FontFamily="Segoe UI" FontSize="11" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding Type}" Foreground="{StaticResource PrimaryRubyBrush}" FontFamily="Segoe UI" FontSize="11" FontWeight="Bold"/>
+                        <TextBlock Text="  •  TOTAL PROGRESS: " Foreground="{StaticResource TextSecondaryBrush}" FontFamily="Segoe UI" FontSize="11" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding TotalEpisodes}" Foreground="{StaticResource PrimaryRubyBrush}" FontFamily="Segoe UI" FontSize="11" FontWeight="Bold"/>
+                    </StackPanel>
+                </StackPanel>
+
+                <!-- Discord Control card -->
+                <Border Grid.Row="1" Style="{StaticResource MangaPanel}">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/> <!-- Header -->
+                            <RowDefinition Height="Auto"/> <!-- Stepper -->
+                            <RowDefinition Height="*"/>    <!-- Discord Preview -->
+                            <RowDefinition Height="Auto"/> <!-- Actions -->
+                        </Grid.RowDefinitions>
+
+                        <!-- Header -->
+                        <controls:CaptionStrip Grid.Row="0" Title="DISCORD BROADCAST PANEL"/>
+
+                        <!-- Stepper -->
+                        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,15" HorizontalAlignment="Center">
+                            <!-- Decrement -->
+                            <Button Content="◄" 
+                                    Command="{Binding DecrementEpisodeCommand}"
+                                    Style="{StaticResource GhostButton}"
+                                    Width="42" Height="36"
+                                    FontWeight="Bold"
+                                    Padding="0"/>
+                            
+                            <!-- Value Box -->
+                            <Border BorderBrush="{StaticResource DividerBrush}" 
+                                    BorderThickness="0,1" 
+                                    Background="{StaticResource CardSurfaceBrush}"
+                                    Width="80" Height="36"
+                                    SnapsToDevicePixels="True">
+                                <TextBlock Text="{Binding SelectedEpisode}" 
+                                           Foreground="{StaticResource PrimaryRubyBrush}"
+                                           FontFamily="Consolas" 
+                                           FontSize="16" 
+                                           FontWeight="Bold" 
+                                           HorizontalAlignment="Center" 
+                                           VerticalAlignment="Center"/>
+                            </Border>
+
+                            <!-- Increment -->
+                            <Button Content="►" 
+                                    Command="{Binding IncrementEpisodeCommand}"
+                                    Style="{StaticResource GhostButton}"
+                                    Width="42" Height="36"
+                                    FontWeight="Bold"
+                                    Padding="0"/>
+
+                            <!-- Total -->
+                            <TextBlock Text="{Binding TotalEpisodes, StringFormat='/ \{0\}'}" 
+                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                       FontFamily="Segoe UI" 
+                                       FontSize="14" 
+                                       FontWeight="Bold"
+                                       VerticalAlignment="Center"
+                                       Margin="12,0,0,0"/>
+                        </StackPanel>
+
+                        <!-- Premium Discord Live Preview Card -->
+                        <Border Grid.Row="2" 
+                                Background="#1E1F22" 
+                                CornerRadius="0"
+                                Padding="15,12"
+                                Margin="0,0,0,15"
+                                SnapsToDevicePixels="True">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Discord RPC Icon -->
+                                <Border Grid.Column="0" 
+                                        CornerRadius="0" 
+                                        ClipToBounds="True"
+                                        Width="64" Height="64" 
+                                        Margin="0,0,15,0"
+                                        Background="#2B2D31"
+                                        VerticalAlignment="Center"
+                                        SnapsToDevicePixels="True">
+                                    <Image Source="{Binding CoverImagePath}"
+                                           Stretch="UniformToFill"
+                                           RenderOptions.BitmapScalingMode="Fant"/>
+                                </Border>
+
+                                <!-- Discord RPC texts -->
+                                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                    <!-- Header -->
+                                    <TextBlock Text="PLAYING A GAME" 
+                                               Foreground="#949BA4" 
+                                               FontFamily="Segoe UI" 
+                                               FontSize="10" 
+                                               FontWeight="Bold"/>
+                                    
+                                    <!-- App name -->
+                                    <TextBlock Text="MAL Status" 
+                                               Foreground="White" 
+                                               FontFamily="Segoe UI" 
+                                               FontSize="13" 
+                                               FontWeight="Bold"
+                                               Margin="0,2,0,0"/>
+                                    
+                                    <!-- Details -->
+                                    <TextBlock Text="{Binding PreviewDetails}" 
+                                               Foreground="#DBDEE1" 
+                                               FontFamily="Segoe UI" 
+                                               FontSize="13"
+                                               TextTrimming="CharacterEllipsis"
+                                               Margin="0,2,0,0"/>
+                                    
+                                    <!-- State -->
+                                    <TextBlock Text="{Binding PreviewState}" 
+                                               Foreground="#DBDEE1" 
+                                               FontFamily="Segoe UI" 
+                                               FontSize="13"
+                                               TextTrimming="CharacterEllipsis"
+                                               Margin="0,1,0,0"/>
+
+                                    <!-- Time elapsed -->
+                                    <StackPanel Orientation="Horizontal" Margin="0,2,0,0">
+                                        <TextBlock Text="{Binding ElapsedTimeText}" 
+                                                   Foreground="#DBDEE1" 
+                                                   FontFamily="Consolas" 
+                                                   FontSize="12"/>
+                                        <TextBlock Text=" elapsed" 
+                                                   Foreground="#949BA4" 
+                                                   FontFamily="Segoe UI" 
+                                                   FontSize="12" 
+                                                   Margin="3,0,0,0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <!-- Control Actions -->
+                        <Grid Grid.Row="3">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Button Grid.Column="0" 
+                                    Content="{Binding StatusButtonText}" 
+                                    Command="{Binding TogglePresenceCommand}"
+                                    Height="45"
+                                    FontSize="13"
+                                    FontWeight="SemiBold">
+                                <Button.Style>
+                                    <Style TargetType="Button" BasedOn="{StaticResource RubyButton}">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsPresenceActive}" Value="True">
+                                                <Setter Property="Background" Value="{StaticResource DarkRubyBrush}"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            
+                            <Button Grid.Column="1" 
+                                    Content="↗ VIEW ON MAL" 
+                                    Command="{Binding ViewOnMalCommand}"
+                                    Style="{StaticResource GhostButton}"
+                                    Height="45"
+                                    Margin="10,0,0,0"/>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

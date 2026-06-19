@@ -1,0 +1,12 @@
+<UserControl x:Class="MALDiscordPresence.Controls.CaptionStrip"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Name="root">
+    <Border Background="{StaticResource DarkRubyBrush}" Padding="10,5">
+        <TextBlock Text="{Binding DisplayTitle, ElementName=root}"
+                   Foreground="White"
+                   FontFamily="Consolas, Courier New"
+                   FontSize="11"
+                   FontWeight="Bold" />
+    </Border>
+</UserControl>
