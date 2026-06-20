@@ -218,9 +218,9 @@
                                 Command="{Binding NavigateToSettingsCommand}"
                                 Style="{StaticResource SidebarNavButton}"/>
                         
-                        <!-- Logout Button -->
-                        <Button Content="Disconnect MAL" 
-                                Command="{Binding LogoutCommand}"
+                        <!-- Logout/Login Button -->
+                        <Button Content="{Binding AuthButtonText}" 
+                                Command="{Binding AuthActionCommand}"
                                 Style="{StaticResource SidebarNavButton}"/>
                     </StackPanel>
 

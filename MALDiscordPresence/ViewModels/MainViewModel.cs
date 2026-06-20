@@ -21,6 +21,9 @@ public partial class MainViewModel : ObservableObject
     private bool _isAuthenticated;
 
     [ObservableProperty]
+    private string _authButtonText = "Disconnect MAL";
+
+    [ObservableProperty]
     private bool _isDiscordConnected;
 
     [ObservableProperty]
@@ -39,6 +42,7 @@ public partial class MainViewModel : ObservableObject
 
         // Check if user is already authenticated
         IsAuthenticated = _authService.IsAuthenticated;
+        UpdateAuthStatus();
         if (IsAuthenticated)
         {
             NavigateToLibrary();
@@ -58,11 +62,24 @@ public partial class MainViewModel : ObservableObject
         DiscordStatusText = connected ? "Connected" : "Disconnected";
     }
 
+    private void UpdateAuthStatus()
+    {
+        if (_authService.IsAuthenticated)
+        {
+            AuthButtonText = "Disconnect MAL";
+        }
+        else
+        {
+            AuthButtonText = "Connect MAL";
+        }
+    }
+
     public void NavigateToLogin()
     {
         CurrentView = new LoginViewModel(_authService, () =>
         {
             IsAuthenticated = true;
+            UpdateAuthStatus();
             NavigateToLibrary();
         });
     }
@@ -112,11 +129,31 @@ public partial class MainViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void Logout()
+    private void AuthAction()
+    {
+        if (_authService.IsAuthenticated)
+        {
+            var dialog = new Views.ConfirmDialog(
+                "Are you sure you want to disconnect your MyAnimeList account? This will clear all synced data from the current session.",
+                "DISCONNECT MYANIMELIST");
+            dialog.Owner = System.Windows.Application.Current.MainWindow;
+            if (dialog.ShowDialog() == true)
+            {
+                PerformLogout();
+            }
+        }
+        else
+        {
+            NavigateToLogin();
+        }
+    }
+
+    private void PerformLogout()
     {
         _authService.Logout();
         _discordService.ClearPresence();
         IsAuthenticated = false;
+        UpdateAuthStatus();
         NavigateToLogin();
     }
 }
