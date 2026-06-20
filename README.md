@@ -27,16 +27,23 @@ Designed with a high-contrast **retro Manga aesthetic**, it combines a beautiful
 
 ## 📷 Screenshots
 
-### Active Library Grid
+### 🗃️ Active Library Grid
 <p align="center">
-  <img src="images/dashboard.png" alt="Ani-Where Library Grid Dashboard" width="700" />
+  <img src="images/library_screen.jpg" alt="Ani-Where Library Grid" width="800" />
 </p>
 
-### Premium Status Customization & Media Details
+### 🔍 Search & Discovery
 <p align="center">
-  <img src="images/screenshot_1.png" alt="Ani-Where Broadcast Control Panel" width="400" />
+  <img src="images/search_screen.png" alt="Ani-Where Search View" width="800" />
+</p>
+
+### 🎮 Connection, Controls & Settings Panels
+<p align="center">
+  <img src="images/launch_screen.jpg" alt="Ani-Where Launch Screen" width="280" />
   &nbsp;&nbsp;&nbsp;&nbsp;
-  <img src="images/screenshot_2.png" alt="Ani-Where Settings Panel" width="400" />
+  <img src="images/details_screen.jpg" alt="Ani-Where Details Screen" width="280" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/app_setting_screen.jpg" alt="Ani-Where App Settings" width="280" />
 </p>
 
 ---
