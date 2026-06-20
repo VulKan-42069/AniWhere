@@ -64,15 +64,38 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <StackPanel Grid.Row="0" Margin="0,0,0,10">
-                                <TextBlock Text="Application ID" 
-                                           Foreground="{StaticResource TextPrimaryBrush}" 
-                                           FontWeight="SemiBold" 
-                                           FontSize="13"
-                                           Margin="0,0,0,5"/>
-                                <TextBox Text="{Binding DiscordAppId, UpdateSourceTrigger=PropertyChanged}" 
-                                         Style="{StaticResource MangaTextBox}"/>
-                            </StackPanel>
+                            <Grid Grid.Row="0" Margin="0,0,0,10">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock Text="Application ID" 
+                                               Foreground="{StaticResource TextPrimaryBrush}" 
+                                               FontWeight="SemiBold" 
+                                               FontSize="13"
+                                               Margin="0,0,0,5"/>
+                                    <TextBlock Text="{Binding DiscordAppIdStatusText}" 
+                                               Foreground="{StaticResource TextSecondaryBrush}" 
+                                               FontSize="12"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,0,0">
+                                    <Button Content="⚙ CHANGE" 
+                                            Command="{Binding ChangeDiscordAppIdCommand}"
+                                            Style="{StaticResource GhostButton}"
+                                            Padding="15,7"
+                                            FontSize="11"
+                                            Margin="0,0,5,0"/>
+                                    <Button Content="↺ RESET" 
+                                            Command="{Binding ResetDiscordAppIdCommand}"
+                                            Style="{StaticResource GhostButton}"
+                                            Padding="15,7"
+                                            FontSize="11"
+                                            Visibility="{Binding IsCustomDiscordAppId, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                </StackPanel>
+                            </Grid>
 
                             <Grid Grid.Row="1" Margin="0,5,0,0">
                                 <Grid.ColumnDefinitions>
@@ -126,30 +149,36 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <Grid Grid.Row="0">
+                            <Grid Grid.Row="0" Margin="0,0,0,10">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel Grid.Column="0" Margin="0,0,10,10">
-                                    <TextBlock Text="Client ID" 
+                                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                                    <TextBlock Text="MyAnimeList Connection Status" 
                                                Foreground="{StaticResource TextPrimaryBrush}" 
                                                FontWeight="SemiBold" 
                                                FontSize="13"
                                                Margin="0,0,0,5"/>
-                                    <TextBox Text="{Binding MalClientId, UpdateSourceTrigger=PropertyChanged}" 
-                                             Style="{StaticResource MangaTextBox}"/>
+                                    <TextBlock Text="{Binding MalCredentialsStatusText}" 
+                                               Foreground="{StaticResource TextSecondaryBrush}" 
+                                               FontSize="12"/>
                                 </StackPanel>
 
-                                <StackPanel Grid.Column="1" Margin="10,0,0,10">
-                                    <TextBlock Text="Client Secret" 
-                                               Foreground="{StaticResource TextPrimaryBrush}" 
-                                               FontWeight="SemiBold" 
-                                               FontSize="13"
-                                               Margin="0,0,0,5"/>
-                                    <TextBox Text="{Binding MalClientSecret, UpdateSourceTrigger=PropertyChanged}" 
-                                             Style="{StaticResource MangaTextBox}"/>
+                                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,0,0">
+                                    <Button Content="⚙ CHANGE CREDENTIALS" 
+                                            Command="{Binding ChangeMalCredentialsCommand}"
+                                            Style="{StaticResource GhostButton}"
+                                            Padding="15,7"
+                                            FontSize="11"
+                                            Margin="0,0,5,0"/>
+                                    <Button Content="↺ RESET" 
+                                            Command="{Binding ResetMalCredentialsCommand}"
+                                            Style="{StaticResource GhostButton}"
+                                            Padding="15,7"
+                                            FontSize="11"
+                                            Visibility="{Binding IsCustomMalCredentials, Converter={StaticResource BoolToVisibilityConverter}}"/>
                                 </StackPanel>
                             </Grid>
 

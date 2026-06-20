@@ -28,9 +28,42 @@ public static class ConfigManager
         set => _settings = value;
     }
 
+    public static string DefaultDiscordAppId => "1517556315164250263";
+    public static string DefaultMalClientId { get; private set; } = "";
+    public static string DefaultMalClientSecret { get; private set; } = "";
+
+    public static bool IsCustomDiscordAppId => _settings.DiscordAppId != DefaultDiscordAppId;
+    public static bool IsCustomMalCredentials => _settings.MalClientId != DefaultMalClientId || _settings.MalClientSecret != DefaultMalClientSecret;
+
     static ConfigManager()
     {
+        LoadDefaultSecrets();
         Load();
+    }
+
+    private static void LoadDefaultSecrets()
+    {
+        try
+        {
+            string secretsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "secrets.json");
+            if (File.Exists(secretsPath))
+            {
+                var json = File.ReadAllText(secretsPath);
+                using var doc = JsonDocument.Parse(json);
+                if (doc.RootElement.TryGetProperty("MalClientId", out var cid))
+                {
+                    DefaultMalClientId = cid.GetString() ?? "";
+                }
+                if (doc.RootElement.TryGetProperty("MalClientSecret", out var csec))
+                {
+                    DefaultMalClientSecret = csec.GetString() ?? "";
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Failed to load default secrets: {ex.Message}");
+        }
     }
 
     public static void Load()
@@ -59,30 +92,27 @@ public static class ConfigManager
 
     private static void ApplySecretsFallback()
     {
-        try
+        if (string.IsNullOrEmpty(_settings.MalClientId))
         {
-            if (string.IsNullOrEmpty(_settings.MalClientId) || string.IsNullOrEmpty(_settings.MalClientSecret))
-            {
-                string secretsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "secrets.json");
-                if (File.Exists(secretsPath))
-                {
-                    var json = File.ReadAllText(secretsPath);
-                    using var doc = JsonDocument.Parse(json);
-                    if (string.IsNullOrEmpty(_settings.MalClientId) && doc.RootElement.TryGetProperty("MalClientId", out var cid))
-                    {
-                        _settings.MalClientId = cid.GetString() ?? "";
-                    }
-                    if (string.IsNullOrEmpty(_settings.MalClientSecret) && doc.RootElement.TryGetProperty("MalClientSecret", out var csec))
-                    {
-                        _settings.MalClientSecret = csec.GetString() ?? "";
-                    }
-                }
-            }
+            _settings.MalClientId = DefaultMalClientId;
         }
-        catch (Exception ex)
+        if (string.IsNullOrEmpty(_settings.MalClientSecret))
         {
-            System.Diagnostics.Debug.WriteLine($"Failed to load secrets fallback: {ex.Message}");
+            _settings.MalClientSecret = DefaultMalClientSecret;
         }
+    }
+
+    public static void ResetDiscordAppId()
+    {
+        _settings.DiscordAppId = DefaultDiscordAppId;
+        Save();
+    }
+
+    public static void ResetMalCredentials()
+    {
+        _settings.MalClientId = DefaultMalClientId;
+        _settings.MalClientSecret = DefaultMalClientSecret;
+        Save();
     }
 
     public static void Save()

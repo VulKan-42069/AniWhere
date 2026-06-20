@@ -23,6 +23,18 @@ public partial class SettingsViewModel : ObservableObject
     private string _malClientSecret;
 
     [ObservableProperty]
+    private string _discordAppIdStatusText = string.Empty;
+
+    [ObservableProperty]
+    private string _malCredentialsStatusText = string.Empty;
+
+    [ObservableProperty]
+    private bool _isCustomDiscordAppId;
+
+    [ObservableProperty]
+    private bool _isCustomMalCredentials;
+
+    [ObservableProperty]
     private bool _startWithWindows;
 
     [ObservableProperty]
@@ -51,6 +63,8 @@ public partial class SettingsViewModel : ObservableObject
         _startMinimized = settings.StartMinimized;
         _showEpisodeProgress = settings.ShowEpisodeProgress;
 
+        UpdateStatusProperties();
+
         DiscordStatusText = _discordService.IsConnected ? "Connected" : "Disconnected";
         _discordService.ConnectionChanged += OnDiscordConnectionChanged;
     }
@@ -58,6 +72,59 @@ public partial class SettingsViewModel : ObservableObject
     private void OnDiscordConnectionChanged(object? sender, bool connected)
     {
         DiscordStatusText = connected ? "Connected" : "Disconnected";
+    }
+
+    private void UpdateStatusProperties()
+    {
+        IsCustomDiscordAppId = DiscordAppId != ConfigManager.DefaultDiscordAppId;
+        DiscordAppIdStatusText = IsCustomDiscordAppId
+            ? $"Using custom Discord App ID: {DiscordAppId}"
+            : "Using default Discord App ID (1517556315164250263).";
+
+        IsCustomMalCredentials = MalClientId != ConfigManager.DefaultMalClientId || MalClientSecret != ConfigManager.DefaultMalClientSecret;
+        MalCredentialsStatusText = IsCustomMalCredentials
+            ? "Using custom MyAnimeList developer API credentials."
+            : "Using default MyAnimeList developer API credentials (hidden).";
+    }
+
+    [RelayCommand]
+    private void ChangeDiscordAppId()
+    {
+        var dialog = new Views.CredentialInputDialog(false);
+        dialog.Owner = System.Windows.Application.Current.MainWindow;
+        if (dialog.ShowDialog() == true)
+        {
+            DiscordAppId = dialog.DiscordAppId;
+            UpdateStatusProperties();
+        }
+    }
+
+    [RelayCommand]
+    private void ResetDiscordAppId()
+    {
+        DiscordAppId = ConfigManager.DefaultDiscordAppId;
+        UpdateStatusProperties();
+    }
+
+    [RelayCommand]
+    private void ChangeMalCredentials()
+    {
+        var dialog = new Views.CredentialInputDialog(true);
+        dialog.Owner = System.Windows.Application.Current.MainWindow;
+        if (dialog.ShowDialog() == true)
+        {
+            MalClientId = dialog.MalClientId;
+            MalClientSecret = dialog.MalClientSecret;
+            UpdateStatusProperties();
+        }
+    }
+
+    [RelayCommand]
+    private void ResetMalCredentials()
+    {
+        MalClientId = ConfigManager.DefaultMalClientId;
+        MalClientSecret = ConfigManager.DefaultMalClientSecret;
+        UpdateStatusProperties();
     }
 
     [RelayCommand]
@@ -76,6 +143,7 @@ public partial class SettingsViewModel : ObservableObject
         // Apply startup behavior
         ApplyStartupBehavior(StartWithWindows);
 
+        UpdateStatusProperties();
         SaveMessage = "Settings saved successfully!";
     }
 
