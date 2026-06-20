@@ -35,15 +35,7 @@ public partial class MainWindow : Window
 
     private void Close_Click(object sender, RoutedEventArgs e)
     {
-        if (ConfigManager.Settings.StartMinimized)
-        {
-            this.Hide();
-        }
-        else
-        {
-            // By default, X minimizes to system tray instead of closing
-            this.Hide();
-        }
+        this.Close();
     }
 
     protected override void OnClosing(CancelEventArgs e)
@@ -51,7 +43,21 @@ public partial class MainWindow : Window
         if (!_isClosingForReal)
         {
             e.Cancel = true;
-            this.Hide();
+
+            var dialog = new Views.ExitDialog();
+            dialog.Owner = this;
+            if (dialog.ShowDialog() == true)
+            {
+                if (dialog.SelectedAction == Views.ExitAction.Exit)
+                {
+                    _isClosingForReal = true;
+                    this.Close();
+                }
+                else if (dialog.SelectedAction == Views.ExitAction.Minimize)
+                {
+                    this.Hide();
+                }
+            }
         }
         else
         {
