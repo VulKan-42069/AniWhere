@@ -49,6 +49,9 @@ public partial class DetailViewModel : ObservableObject
     [ObservableProperty]
     private string _localSaveButtonText = "✚ SAVE TO LIBRARY";
 
+    [ObservableProperty]
+    private string _historyProgressText = "None";
+
     public bool IsPlaceholder => _mediaEntry == null;
 
     public bool MediaEntryEquals(object entry)
@@ -79,6 +82,7 @@ public partial class DetailViewModel : ObservableObject
             MalUrl = string.Empty;
             IsSavedToLocal = false;
             LocalSaveButtonText = "✚ SAVE TO LIBRARY";
+            HistoryProgressText = "None";
             return;
         }
 
@@ -92,7 +96,18 @@ public partial class DetailViewModel : ObservableObject
             localPath = anime.LocalCoverPath ?? string.Empty;
             rawUrl = anime.MainPicture?.Large ?? anime.MainPicture?.Medium ?? string.Empty;
             TotalEpisodes = anime.NumEpisodes;
-            SelectedEpisode = anime.MyListStatus?.NumEpisodesWatched ?? 0;
+            if (anime.MyListStatus == null)
+            {
+                anime.MyListStatus = new AnimeListStatus { Status = "watching" };
+            }
+            SelectedEpisode = anime.MyListStatus.NumEpisodesWatched;
+            
+            // Sync with local history
+            int historyVal = LocalHistoryManager.GetAnimeProgress(anime.Id, SelectedEpisode);
+            SelectedEpisode = Math.Max(SelectedEpisode, historyVal);
+            anime.MyListStatus.NumEpisodesWatched = SelectedEpisode;
+            HistoryProgressText = SelectedEpisode > 0 ? $"Episode {SelectedEpisode}" : "No progress recorded";
+
             MalUrl = $"https://myanimelist.net/anime/{anime.Id}";
             IsSavedToLocal = LocalLibraryManager.IsAnimeSaved(anime.Id);
         }
@@ -103,7 +118,18 @@ public partial class DetailViewModel : ObservableObject
             localPath = manga.LocalCoverPath ?? string.Empty;
             rawUrl = manga.MainPicture?.Large ?? manga.MainPicture?.Medium ?? string.Empty;
             TotalEpisodes = manga.NumChapters;
-            SelectedEpisode = manga.MyListStatus?.NumChaptersRead ?? 0;
+            if (manga.MyListStatus == null)
+            {
+                manga.MyListStatus = new MangaListStatus { Status = "reading" };
+            }
+            SelectedEpisode = manga.MyListStatus.NumChaptersRead;
+            
+            // Sync with local history
+            int historyVal = LocalHistoryManager.GetMangaProgress(manga.Id, SelectedEpisode);
+            SelectedEpisode = Math.Max(SelectedEpisode, historyVal);
+            manga.MyListStatus.NumChaptersRead = SelectedEpisode;
+            HistoryProgressText = SelectedEpisode > 0 ? $"Chapter {SelectedEpisode}" : "No progress recorded";
+
             MalUrl = $"https://myanimelist.net/manga/{manga.Id}";
             IsSavedToLocal = LocalLibraryManager.IsMangaSaved(manga.Id);
         }
@@ -149,6 +175,38 @@ public partial class DetailViewModel : ObservableObject
         {
             SelectedEpisode = TotalEpisodes;
             return;
+        }
+
+        // Save progress to local history and local library
+        if (_mediaEntry is AnimeEntry anime)
+        {
+            if (anime.MyListStatus == null)
+            {
+                anime.MyListStatus = new AnimeListStatus { Status = "watching" };
+            }
+            anime.MyListStatus.NumEpisodesWatched = value;
+            LocalHistoryManager.SaveAnimeProgress(anime.Id, value);
+            HistoryProgressText = value > 0 ? $"Episode {value}" : "No progress recorded";
+
+            if (IsSavedToLocal)
+            {
+                LocalLibraryManager.SaveAnime(anime);
+            }
+        }
+        else if (_mediaEntry is MangaEntry manga)
+        {
+            if (manga.MyListStatus == null)
+            {
+                manga.MyListStatus = new MangaListStatus { Status = "reading" };
+            }
+            manga.MyListStatus.NumChaptersRead = value;
+            LocalHistoryManager.SaveMangaProgress(manga.Id, value);
+            HistoryProgressText = value > 0 ? $"Chapter {value}" : "No progress recorded";
+
+            if (IsSavedToLocal)
+            {
+                LocalLibraryManager.SaveManga(manga);
+            }
         }
 
         UpdatePreview();

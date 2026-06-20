@@ -22,7 +22,7 @@ public partial class CredentialInputDialog : Window
             DescriptionText.Text = "Please enter your MyAnimeList API credentials. Leave blank to cancel. Existing active credentials are hidden for security.";
             MalPanel.Visibility = Visibility.Visible;
             DiscordPanel.Visibility = Visibility.Collapsed;
-            this.Height = 290;
+            this.Height = 360;
         }
         else
         {
@@ -30,7 +30,7 @@ public partial class CredentialInputDialog : Window
             DescriptionText.Text = "Please enter your Discord Application ID. Leave blank to cancel. Existing active ID is hidden for security.";
             MalPanel.Visibility = Visibility.Collapsed;
             DiscordPanel.Visibility = Visibility.Visible;
-            this.Height = 210;
+            this.Height = 280;
         }
     }
 

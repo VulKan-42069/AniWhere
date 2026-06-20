@@ -100,11 +100,24 @@ public partial class LibraryViewModel : ObservableObject
                 {
                     malItem.IsFromMal = true;
                     malItem.IsFromLocal = LocalLibraryManager.IsAnimeSaved(malItem.Id);
+                    if (malItem.MyListStatus == null)
+                    {
+                        malItem.MyListStatus = new AnimeListStatus { Status = "watching" };
+                    }
+                    int localProgress = LocalHistoryManager.GetAnimeProgress(malItem.Id, 0);
+                    malItem.MyListStatus.NumEpisodesWatched = Math.Max(malItem.MyListStatus.NumEpisodesWatched, localProgress);
+                    LocalHistoryManager.SaveAnimeProgress(malItem.Id, malItem.MyListStatus.NumEpisodesWatched);
                     mergedAnime.Add(malItem);
                 }
 
                 foreach (var localItem in localAnime)
                 {
+                    if (localItem.MyListStatus == null)
+                    {
+                        localItem.MyListStatus = new AnimeListStatus { Status = "watching" };
+                    }
+                    localItem.MyListStatus.NumEpisodesWatched = LocalHistoryManager.GetAnimeProgress(localItem.Id, localItem.MyListStatus.NumEpisodesWatched);
+
                     if (mergedAnime.All(a => a.Id != localItem.Id))
                     {
                         localItem.IsFromMal = false;
@@ -142,11 +155,24 @@ public partial class LibraryViewModel : ObservableObject
                 {
                     malItem.IsFromMal = true;
                     malItem.IsFromLocal = LocalLibraryManager.IsMangaSaved(malItem.Id);
+                    if (malItem.MyListStatus == null)
+                    {
+                        malItem.MyListStatus = new MangaListStatus { Status = "reading" };
+                    }
+                    int localProgress = LocalHistoryManager.GetMangaProgress(malItem.Id, 0);
+                    malItem.MyListStatus.NumChaptersRead = Math.Max(malItem.MyListStatus.NumChaptersRead, localProgress);
+                    LocalHistoryManager.SaveMangaProgress(malItem.Id, malItem.MyListStatus.NumChaptersRead);
                     mergedManga.Add(malItem);
                 }
 
                 foreach (var localItem in localManga)
                 {
+                    if (localItem.MyListStatus == null)
+                    {
+                        localItem.MyListStatus = new MangaListStatus { Status = "reading" };
+                    }
+                    localItem.MyListStatus.NumChaptersRead = LocalHistoryManager.GetMangaProgress(localItem.Id, localItem.MyListStatus.NumChaptersRead);
+
                     if (mergedManga.All(m => m.Id != localItem.Id))
                     {
                         localItem.IsFromMal = false;
@@ -203,6 +229,12 @@ public partial class LibraryViewModel : ObservableObject
                 {
                     item.IsFromLocal = LocalLibraryManager.IsAnimeSaved(item.Id);
                     item.IsFromMal = (item.MyListStatus != null) || _allAnime.Any(a => a.Id == item.Id && a.IsFromMal);
+                    if (item.MyListStatus == null)
+                    {
+                        item.MyListStatus = new AnimeListStatus { Status = "watching" };
+                    }
+                    int localProgress = LocalHistoryManager.GetAnimeProgress(item.Id, 0);
+                    item.MyListStatus.NumEpisodesWatched = Math.Max(item.MyListStatus.NumEpisodesWatched, localProgress);
                 }
                 AnimeList = new ObservableCollection<AnimeEntry>(results);
                 _ = Task.Run(() => LoadAnimeCoversAsync(results));
@@ -214,6 +246,12 @@ public partial class LibraryViewModel : ObservableObject
                 {
                     item.IsFromLocal = LocalLibraryManager.IsMangaSaved(item.Id);
                     item.IsFromMal = (item.MyListStatus != null) || _allManga.Any(m => m.Id == item.Id && m.IsFromMal);
+                    if (item.MyListStatus == null)
+                    {
+                        item.MyListStatus = new MangaListStatus { Status = "reading" };
+                    }
+                    int localProgress = LocalHistoryManager.GetMangaProgress(item.Id, 0);
+                    item.MyListStatus.NumChaptersRead = Math.Max(item.MyListStatus.NumChaptersRead, localProgress);
                 }
                 MangaList = new ObservableCollection<MangaEntry>(results);
                 _ = Task.Run(() => LoadMangaCoversAsync(results));

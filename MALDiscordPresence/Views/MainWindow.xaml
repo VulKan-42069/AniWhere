@@ -8,7 +8,7 @@
         xmlns:converters="clr-namespace:MALDiscordPresence.Converters"
         mc:Ignorable="d"
         Title="Ani-Where" 
-        Height="650" Width="950"
+        Height="775" Width="980"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource SurfaceBrush}"
         BorderBrush="{StaticResource DarkRubyBrush}"

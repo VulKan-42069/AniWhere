@@ -102,6 +102,8 @@
                         <TextBlock Text="{Binding Type}" Foreground="{StaticResource PrimaryRubyBrush}" FontFamily="Segoe UI" FontSize="11" FontWeight="Bold"/>
                         <TextBlock Text="  •  TOTAL PROGRESS: " Foreground="{StaticResource TextSecondaryBrush}" FontFamily="Segoe UI" FontSize="11" FontWeight="Bold"/>
                         <TextBlock Text="{Binding TotalEpisodes}" Foreground="{StaticResource PrimaryRubyBrush}" FontFamily="Segoe UI" FontSize="11" FontWeight="Bold"/>
+                        <TextBlock Text="  •  LAST HISTORY: " Foreground="{StaticResource TextSecondaryBrush}" FontFamily="Segoe UI" FontSize="11" FontWeight="Bold"/>
+                        <TextBlock Text="{Binding HistoryProgressText}" Foreground="{StaticResource PrimaryRubyBrush}" FontFamily="Segoe UI" FontSize="11" FontWeight="Bold"/>
                     </StackPanel>
                 </StackPanel>
 

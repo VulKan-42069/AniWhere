@@ -69,11 +69,20 @@ public static class LocalLibraryManager
 
     public static void SaveAnime(AnimeEntry anime)
     {
-        if (!_data.Anime.Any(a => a.Id == anime.Id))
+        var existing = _data.Anime.FirstOrDefault(a => a.Id == anime.Id);
+        if (existing != null)
+        {
+            existing.Title = anime.Title;
+            existing.NumEpisodes = anime.NumEpisodes;
+            existing.MyListStatus = anime.MyListStatus;
+            existing.LocalCoverPath = anime.LocalCoverPath;
+            existing.MainPicture = anime.MainPicture;
+        }
+        else
         {
             _data.Anime.Add(anime);
-            Save();
         }
+        Save();
     }
 
     public static void RemoveAnime(int id)
@@ -88,11 +97,20 @@ public static class LocalLibraryManager
 
     public static void SaveManga(MangaEntry manga)
     {
-        if (!_data.Manga.Any(m => m.Id == manga.Id))
+        var existing = _data.Manga.FirstOrDefault(m => m.Id == manga.Id);
+        if (existing != null)
+        {
+            existing.Title = manga.Title;
+            existing.NumChapters = manga.NumChapters;
+            existing.MyListStatus = manga.MyListStatus;
+            existing.LocalCoverPath = manga.LocalCoverPath;
+            existing.MainPicture = manga.MainPicture;
+        }
+        else
         {
             _data.Manga.Add(manga);
-            Save();
         }
+        Save();
     }
 
     public static void RemoveManga(int id)
