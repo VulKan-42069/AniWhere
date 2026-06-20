@@ -37,6 +37,11 @@ Designed with a high-contrast **retro Manga aesthetic**, it combines a beautiful
   <img src="images/search_screen.png" alt="Ani-Where Search View" width="800" />
 </p>
 
+### 💬 Discord Profile Status Display
+<p align="center">
+  <img src="images/display_on_discord.png" alt="Discord Profile Status" width="400" />
+</p>
+
 ### 🎮 Connection, Controls & Settings Panels
 <p align="center">
   <img src="images/launch_screen.jpg" alt="Ani-Where Launch Screen" width="280" />
