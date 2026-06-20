@@ -27,6 +27,11 @@ Designed with a high-contrast **retro Manga aesthetic**, it combines a beautiful
 
 ## 📷 Screenshots
 
+### 💬 Discord Profile Status Display
+<p align="center">
+  <img src="images/display_on_dc.png" alt="Discord Profile Status" width="400" />
+</p>
+
 ### 🗃️ Active Library Grid
 <p align="center">
   <img src="images/library_screen.jpg" alt="Ani-Where Library Grid" width="800" />
@@ -35,11 +40,6 @@ Designed with a high-contrast **retro Manga aesthetic**, it combines a beautiful
 ### 🔍 Search & Discovery
 <p align="center">
   <img src="images/search_screen.png" alt="Ani-Where Search View" width="800" />
-</p>
-
-### 💬 Discord Profile Status Display
-<p align="center">
-  <img src="images/display_on_dc.png" alt="Discord Profile Status" width="400" />
 </p>
 
 ### 🎮 Connection, Controls & Settings Panels
