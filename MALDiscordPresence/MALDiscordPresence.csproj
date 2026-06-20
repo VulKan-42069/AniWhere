@@ -27,4 +27,10 @@
     <Resource Include="Assets\icon.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="secrets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

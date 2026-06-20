@@ -44,6 +44,7 @@ public static class ConfigManager
                 if (loaded != null)
                 {
                     _settings = loaded;
+                    ApplySecretsFallback();
                     return;
                 }
             }
@@ -53,6 +54,35 @@ public static class ConfigManager
             System.Diagnostics.Debug.WriteLine($"Failed to load config: {ex.Message}");
         }
         _settings = new ConfigSettings();
+        ApplySecretsFallback();
+    }
+
+    private static void ApplySecretsFallback()
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(_settings.MalClientId) || string.IsNullOrEmpty(_settings.MalClientSecret))
+            {
+                string secretsPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "secrets.json");
+                if (File.Exists(secretsPath))
+                {
+                    var json = File.ReadAllText(secretsPath);
+                    using var doc = JsonDocument.Parse(json);
+                    if (string.IsNullOrEmpty(_settings.MalClientId) && doc.RootElement.TryGetProperty("MalClientId", out var cid))
+                    {
+                        _settings.MalClientId = cid.GetString() ?? "";
+                    }
+                    if (string.IsNullOrEmpty(_settings.MalClientSecret) && doc.RootElement.TryGetProperty("MalClientSecret", out var csec))
+                    {
+                        _settings.MalClientSecret = csec.GetString() ?? "";
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Failed to load secrets fallback: {ex.Message}");
+        }
     }
 
     public static void Save()

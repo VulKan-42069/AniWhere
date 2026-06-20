@@ -4,6 +4,9 @@
 [Pp]ublish/
 [Oo]utput/
 
+# Secrets
+MALDiscordPresence/secrets.json
+
 # Visual Studio / Rider / IDE directories
 .vs/
 .idea/
