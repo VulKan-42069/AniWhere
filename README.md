@@ -39,7 +39,7 @@ Designed with a high-contrast **retro Manga aesthetic**, it combines a beautiful
 
 ### 💬 Discord Profile Status Display
 <p align="center">
-  <img src="images/display_on_discord.png" alt="Discord Profile Status" width="400" />
+  <img src="images/display_on_dc.png" alt="Discord Profile Status" width="400" />
 </p>
 
 ### 🎮 Connection, Controls & Settings Panels
