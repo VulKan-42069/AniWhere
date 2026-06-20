@@ -1,80 +1,129 @@
-# Anime // MAL Status Companion
+<p align="center">
+  <img src="images/app_icon.png" alt="Ani-Where Icon" width="128" height="128" />
+</p>
 
-A lightweight WPF desktop companion application that automatically broadcasts your currently watching anime and reading manga progress from MyAnimeList (MAL) directly into your Discord Rich Presence status, styled in a clean, high-contrast retro **Manga aesthetic**.
+<h1 align="center">Ani-Where</h1>
+
+<p align="center">
+  <strong>A high-contrast, premium WPF companion for MyAnimeList and Discord Rich Presence</strong>
+</p>
+
+<p align="center">
+  <a href="#-features">Features</a> •
+  <a href="#-design-language">Design Language</a> •
+  <a href="#-getting-started">Getting Started</a> •
+  <a href="#-installer-compilation">Installer Compilation</a>
+</p>
 
 ---
 
-## 🎨 Design Language (Manga Style)
-* **Hard Outlines & Sharp Edges:** Zero corner rounding on cards, buttons, text fields, and image borders (`CornerRadius="0"`), resembling hand-drawn ink frames.
-* **Solid Block Shadows:** Features flat, offset black block shadows with zero blur (`BlurRadius="0"`, `ShadowDepth="4"`, `Opacity="1.0"`) instead of modern gradients.
-* **High Contrast Palette:** Uses solid colors (rich `#E0115F` ruby red accent, slate charcoal sidebar, and clean white content panels) with zero color gradients.
+## 📖 Overview
+
+**Ani-Where** is a lightweight, premium WPF desktop application that automatically broadcasts your active MyAnimeList (MAL) anime watching and manga reading progress directly to your Discord Rich Presence status. 
+
+Designed with a high-contrast **retro Manga aesthetic**, it combines a beautiful, responsive user interface with robust offline safety fallbacks, secure credential storage, and local progress history tracking.
+
+---
+
+## 📷 Screenshots
+
+### Active Library Grid
+<p align="center">
+  <img src="images/dashboard.png" alt="Ani-Where Library Grid Dashboard" width="700" />
+</p>
+
+### Premium Status Customization & Media Details
+<p align="center">
+  <img src="images/screenshot_1.png" alt="Ani-Where Broadcast Control Panel" width="400" />
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/screenshot_2.png" alt="Ani-Where Settings Panel" width="400" />
+</p>
 
 ---
 
 ## ✨ Features
-1. **Discord Rich Presence Sync:** 
-   * Broadcasts your active progress to Discord in real-time.
-   * Auto-detects media types (Anime broadcasts "Watching", Manga broadcasts "Watching" with the matching TV screen status icon).
-   * Displays details like "Watching {Title}" and "Episode {X}/{Y}" alongside a "View on MAL" clickable button.
-2. **Currently Watching Active Session:**
-   * A dedicated tab in the navigation menu holds the active broadcast state.
-   * Navigating to other views (e.g. search, settings, library) does not disrupt the active presence or reset the elapsed time counter.
-3. **Local Library Integration:**
-   * Save any media locally to quickly view it again without searching.
-   * Persisted locally under `%LOCALAPPDATA%/MALStatus/local_library.json`.
-4. **Origin Badges:**
-   * Overlay tags (`MAL` / `LOCAL`) display on card covers in the library grid to quickly identify the source databases. If saved in both, both badges are rendered side-by-side.
-5. **Offline Fallback Safety:**
-   * If offline or the MAL API fails, a non-blocking warning is shown and the library seamlessly loads all local entries.
-6. **Direct Stepper Editing:**
-   * Change current progress by typing numbers directly in the text field or using the incremental arrow buttons.
+
+- **⚡ Live Discord Rich Presence:**
+  - Auto-detects media types: broadcasts "Watching {Title}" with a matching television screen icon, or "Reading {Title}" with a matching book icon.
+  - Dynamically displays progress details (e.g. `Episode 3/12` or `Chapter 14/95`) alongside the active elapsed time and a clickable **"View on MAL"** status button.
+
+- **💾 Local Library Manager:**
+  - Save your favorite anime and manga directly to your local library.
+  - Features high-contrast origin badges (`MAL` / `LOCAL`) overlays to visually identify where each entry came from.
+
+- **📜 Local Progress History:**
+  - Keeps track of where you left off by storing your watch and read history in a local cache.
+  - Integrates with MAL on launch, automatically resolving conflicts by taking the latest/highest progress value.
+  - Shows your last history progress directly on the details page (e.g., `• LAST HISTORY: Episode 3`).
+
+- **🔒 Secure Local Encryption:**
+  - Stores all MyAnimeList client secrets and user access tokens securely using the **Windows Data Protection API (DPAPI)** to prevent credentials exposure.
+
+- **🌐 Offline Bypass Flow:**
+  - Easily run the app in offline/bypass mode if the network or MAL is down. The app displays an intuitive status message and falls back to loading your local library.
+
+- **⏳ Independent Session Control:**
+  - Manage and track active Discord broadcasts. Navigation between panels (Search, Settings, Library) will never interrupt your active broadcast session or reset the status timer.
 
 ---
 
-## 🛠️ Tech Stack & Dependencies
-* **Core:** .NET 8.0 & WPF (Windows Presentation Foundation)
-* **Architecture:** Model-View-ViewModel (MVVM) powered by `CommunityToolkit.Mvvm`
-* **Secure Storage:** Windows Data Protection API (DPAPI) for local credential encryption
-* **Discord RPC:** `DiscordRichPresence` SDK
+## 🎨 Design Language (Manga Style)
+
+Ani-Where is designed with a unique visual styling modeled after hand-drawn manga ink frames:
+* **Hard Outlines & Sharp Edges:** Zero corner rounding on panels, buttons, inputs, and image borders (`CornerRadius="0"`) for a crisp, structured frame.
+* **Flat Offset Shadows:** Solid black block shadows with zero blur (`BlurRadius="0"`, `ShadowDepth="4"`, `Opacity="1.0"`) to replicate manga ink depth.
+* **Curated Color Palette:** High-contrast solid slate backgrounds, clean white content panels, and a primary `#E0115F` ruby red accent.
 
 ---
 
-## 🚀 Building & Running
+## 🛠️ Tech Stack & Architecture
+
+* **Framework:** .NET 8.0 & WPF (Windows Presentation Foundation)
+* **Architecture Pattern:** MVVM (Model-View-ViewModel) powered by the `CommunityToolkit.Mvvm` SDK
+* **Discord Integration:** `DiscordRichPresence` (C# Wrapper for Discord RPC)
+* **Storage:** Windows DPAPI & `System.Text.Json` local databases
+
+---
+
+## 🚀 Getting Started
 
 ### Prerequisites
-* **.NET 8.0 SDK** (Desktop workload enabled)
-* **Discord Desktop Client** (Must be running for Rich Presence)
+* **.NET 8.0 SDK** or newer
+* **Discord Desktop Client** (running in the background)
 
-### 1. Build and Run (Debug)
-Clone the repository and run the following in the project root:
+### 1. Build and Run (Local Dev)
+Clone the repository and compile the application using the dotnet CLI:
 ```bash
+# Restore dependencies
 dotnet restore
+
+# Run application in debug mode
 dotnet run --project MALDiscordPresence
 ```
 
-### 2. Publish (Production Release)
-To compile a single-folder self-contained win-x64 binary bundle:
+### 2. Compile Release Binary
+To compile a single-folder self-contained win-x64 release bundle:
 ```bash
-# Clean intermediate caches first to ensure fresh resource compile
+# Clean previous build caches
 Remove-Item -Path "MALDiscordPresence/obj", "MALDiscordPresence/bin" -Recurse -Force -ErrorAction SilentlyContinue
 
-# Publish
+# Publish release
 dotnet publish MALDiscordPresence -c Release -r win-x64 --self-contained true -o ./publish
 ```
 
 ---
 
-## 📦 Creating the Installer
+## 📦 Installer Compilation
 
-The project includes an Inno Setup script `setup.iss` to package the published binaries into a native installer `AnimeSetup.exe`.
+The project contains an Inno Setup script (`setup.iss`) to package the published binaries into a native installer `AniWhereSetup.exe`.
 
-1. Install Inno Setup 6 (via winget):
+1. Install **Inno Setup 6** (via winget):
    ```bash
    winget install --id JRSoftware.InnoSetup -e --silent
    ```
-2. Compile the installer:
+2. Compile the installer script:
    ```bash
    & "$env:LocalAppData\Programs\Inno Setup 6\ISCC.exe" setup.iss
    ```
-3. Find the compiled installer executable under the `Output/` folder:
-   * `Output/AnimeSetup.exe`
+3. Locate the compiled setup package in the `Output` directory:
+   * `Output/AniWhereSetup.exe`
