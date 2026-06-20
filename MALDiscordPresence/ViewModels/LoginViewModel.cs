@@ -26,6 +26,12 @@ public partial class LoginViewModel : ObservableObject
     [RelayCommand]
     private async Task LoginAsync()
     {
+        if (string.IsNullOrWhiteSpace(Helpers.ConfigManager.Settings.MalClientId))
+        {
+            ErrorMessage = "MyAnimeList Client ID is empty. Please enter your credentials in 'App Settings' first!";
+            return;
+        }
+
         IsLoading = true;
         ErrorMessage = null;
 
@@ -54,14 +60,7 @@ public partial class LoginViewModel : ObservableObject
     [RelayCommand]
     private void BypassLogin()
     {
-        // For testing or if already authenticated manually
-        if (_authService.IsAuthenticated)
-        {
-            _onLoginSuccess?.Invoke();
-        }
-        else
-        {
-            ErrorMessage = "You must log in to MyAnimeList first.";
-        }
+        // Allow the user to proceed to local library mode directly
+        _onLoginSuccess?.Invoke();
     }
 }
