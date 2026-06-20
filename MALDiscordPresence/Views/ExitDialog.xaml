@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:controls="clr-namespace:MALDiscordPresence.Controls"
         mc:Ignorable="d"
-        Title="Close MAL Status?" 
+        Title="Close Ani-Where?" 
         Height="250" Width="430"
         WindowStyle="None"
         ResizeMode="NoResize"
@@ -29,7 +29,7 @@
 
                 <!-- Message -->
                 <StackPanel Grid.Row="1" VerticalAlignment="Center" Margin="20,10">
-                    <TextBlock Text="What would you like to do with MAL Status?" 
+                    <TextBlock Text="What would you like to do with Ani-Where?" 
                                Foreground="{StaticResource TextPrimaryBrush}" 
                                FontFamily="Segoe UI" 
                                FontSize="14" 
@@ -49,9 +49,9 @@
                 <Border Grid.Row="2" BorderThickness="0,1.5,0,0" BorderBrush="Black" Padding="12" Background="{StaticResource LightRubyBrush}">
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <Grid.ColumnDefinition Width="*"/>
-                            <Grid.ColumnDefinition Width="*"/>
-                            <Grid.ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
                         <!-- Minimize to Tray -->
@@ -68,7 +68,6 @@
                         <Button Grid.Column="1" 
                                 Content="❌ EXIT COMPLETELY" 
                                 Click="Exit_Click"
-                                Style="{StaticResource RubyButton}"
                                 Height="36"
                                 Padding="10,0"
                                 FontSize="10"

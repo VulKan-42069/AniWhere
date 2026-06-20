@@ -34,7 +34,7 @@ public class TrayIcon : IDisposable
             _notifyIcon.Icon = SystemIcons.Application;
         }
 
-        _notifyIcon.Text = "MAL Status";
+        _notifyIcon.Text = "Ani-Where";
         _notifyIcon.DoubleClick += (s, e) => RestoreWindow();
 
         // Create Context Menu

@@ -202,8 +202,8 @@
                                                FontWeight="Bold"/>
                                     
                                     <!-- App name -->
-                                    <TextBlock Text="MAL Status" 
-                                               Foreground="White" 
+                                     <TextBlock Text="Ani-Where" 
+                                                Foreground="White" 
                                                FontFamily="Segoe UI" 
                                                FontSize="13" 
                                                FontWeight="Bold"

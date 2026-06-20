@@ -43,13 +43,13 @@
                 </Grid.RowDefinitions>
 
                 <!-- Panel Header Bar (touches the top and side borders exactly!) -->
-                <controls:CaptionStrip Grid.Row="0" Title="MAL STATUS GATEWAY"/>
+                <controls:CaptionStrip Grid.Row="0" Title="ANI-WHERE GATEWAY"/>
 
                 <!-- Content Area (padded) -->
                 <StackPanel Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,15,25,15">
                     
                     <!-- App Logo/Header -->
-                    <TextBlock Text="MAL STATUS" 
+                    <TextBlock Text="ANI-WHERE" 
                                Foreground="{StaticResource PrimaryRubyBrush}"
                                FontFamily="Segoe UI" 
                                FontSize="28" 

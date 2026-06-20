@@ -213,7 +213,7 @@
 
                             <!-- Start on boot -->
                             <CheckBox IsChecked="{Binding StartWithWindows}" 
-                                      Content="Launch MAL Status automatically when Windows starts"
+                                      Content="Launch Ani-Where automatically when Windows starts"
                                       Foreground="{StaticResource TextPrimaryBrush}"
                                       FontFamily="Segoe UI"
                                       FontSize="13"

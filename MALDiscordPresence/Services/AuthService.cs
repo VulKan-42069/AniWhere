@@ -117,7 +117,7 @@ public class AuthService : IAuthService
                 htmlResponse = "<html><body style='font-family:Segoe UI,sans-serif; text-align:center; padding-top:50px; background-color:#FAF8F7; color:#1B1621;'>" +
                                "<div style='border: 3px solid #9B111E; display:inline-block; padding:30px; background-color:#FFFFFF;'>" +
                                "<h1 style='color:#E0115F; margin-top:0;'>Authentication Successful!</h1>" +
-                               "<p>MAL Status has been linked to your MyAnimeList account.</p>" +
+                               "<p>Ani-Where has been linked to your MyAnimeList account.</p>" +
                                "<p style='color:#6B5B6D;'>You can close this tab and return to the application.</p>" +
                                "</div></body></html>";
             }

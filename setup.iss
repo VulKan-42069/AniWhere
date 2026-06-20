@@ -1,14 +1,14 @@
 [Setup]
-AppName=Anime
+AppName=Ani-Where
 AppVersion=1.0.0
-DefaultDirName={autopf}\Anime
-DefaultGroupName=Anime
-UninstallDisplayIcon={app}\MALStatus.exe
+DefaultDirName={autopf}\Ani-Where
+DefaultGroupName=Ani-Where
+UninstallDisplayIcon={app}\Ani-Where.exe
 WizardStyle=modern
 Compression=lzma2
 SolidCompression=yes
 OutputDir=Output
-OutputBaseFilename=AnimeSetup
+OutputBaseFilename=AniWhereSetup
 SetupIconFile=MALDiscordPresence\Assets\icon.ico
 PrivilegesRequired=lowest
 
@@ -19,8 +19,8 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 Source: "MALDiscordPresence\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{group}\Anime"; Filename: "{app}\MALStatus.exe"
-Name: "{autodesktop}\Anime"; Filename: "{app}\MALStatus.exe"; Tasks: desktopicon
+Name: "{group}\Ani-Where"; Filename: "{app}\Ani-Where.exe"
+Name: "{autodesktop}\Ani-Where"; Filename: "{app}\Ani-Where.exe"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\MALStatus.exe"; Description: "{cm:LaunchProgram,Anime}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\Ani-Where.exe"; Description: "{cm:LaunchProgram,Ani-Where}"; Flags: nowait postinstall skipifsilent

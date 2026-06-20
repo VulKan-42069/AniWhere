@@ -103,7 +103,7 @@ public class DiscordService : IDiscordService
                     LargeImageKey = !string.IsNullOrEmpty(state.CoverImageUrl) ? state.CoverImageUrl : "app_icon",
                     LargeImageText = state.Title,
                     SmallImageKey = "app_icon",
-                    SmallImageText = "MAL Status"
+                    SmallImageText = "Ani-Where"
                 },
                 Timestamps = new Timestamps { Start = state.StartedAt.ToUniversalTime() }
             };

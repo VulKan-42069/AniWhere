@@ -7,7 +7,7 @@
         xmlns:views="clr-namespace:MALDiscordPresence.Views"
         xmlns:converters="clr-namespace:MALDiscordPresence.Converters"
         mc:Ignorable="d"
-        Title="MAL Status" 
+        Title="Ani-Where" 
         Height="650" Width="950"
         WindowStartupLocation="CenterScreen"
         Background="{StaticResource SurfaceBrush}"
@@ -105,7 +105,7 @@
 
                 <!-- Title text -->
                 <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" Margin="15,0,0,0">
-                    <TextBlock Text="MAL STATUS" 
+                    <TextBlock Text="ANI-WHERE" 
                                Foreground="White" 
                                FontFamily="Segoe UI" 
                                FontSize="14" 
